@@ -1,0 +1,11 @@
+name: ci
+on: [push, pull_request]
+jobs:
+  ci:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: brew install nim htslib bcftools
+      - run: sed -i '' -e "s/nim c/nim c --passL:-Wl,-rpath,\/opt\/homebrew\/opt\/htslib\/lib/" tests/functional-tests.sh
+      - run: sed -i '' -e "s/nim c/nim c --passL:-Wl,-rpath,\/opt\/homebrew\/opt\/htslib\/lib/" slivar.nimble
+      - run: nimble test
